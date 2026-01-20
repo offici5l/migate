@@ -1,0 +1,33 @@
+[project]
+name = "migate"
+version = "1.0.0"
+description = "migate is a simplified Xiaomi authentication gateway for Python projects"
+authors = [{name = "offici5l"}]
+readme = "README.md"
+license = {file = "LICENSE"}
+
+keywords = ["xiaomi", "miunlock", "MiUnlockTool", "bootloader", "unlock", "MIUI", "HyperOS", "Tools", "18n_bbs_global", "unlockApi", "xiaomiio", "mi", "auth", "login", "gateway", "2fa", "Captcha"]
+
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent"
+]
+
+requires-python = ">=3.7"
+
+dependencies = [
+    "requests"
+]
+
+[project.urls]
+Repository = "https://github.com/offici5l/migate"
+
+
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
