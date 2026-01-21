@@ -25,7 +25,6 @@ def get_passtoken(auth_data):
     if cookies_file.exists():
         passToken = pickle.load(open(cookies_file, "rb"))
         
-        print(f"\n{Fore.YELLOW}=== Xiaomi Account ==={Style.RESET_ALL}")
         choice = input(
             f"{Fore.GREEN}Already logged in\n"
             f"{Fore.WHITE}Account ID: {Fore.YELLOW}{passToken['userId']}\n\n" 
@@ -54,10 +53,8 @@ def get_passtoken(auth_data):
 
     cookies = {}
 
-    print(f"\n{Fore.YELLOW}Please Login:{Style.RESET_ALL}")
-
     while True:
-        user = input(f"{Fore.WHITE}Username: {Style.RESET_ALL}").strip()
+        user = input(f"{Fore.WHITE}Account ID / Email / Phone (+): {Style.RESET_ALL}").strip()
         pwd_input = input(f"{Fore.WHITE}Password: {Style.RESET_ALL}").strip()
         pwd = hashlib.md5(pwd_input.encode()).hexdigest().upper()
         
