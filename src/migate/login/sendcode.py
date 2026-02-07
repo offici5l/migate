@@ -1,5 +1,6 @@
 import requests
 import json
+from migate.login.captcha import handle_captcha
 from migate.config import (
     HEADERS,
     SEND_EM_TICKET,

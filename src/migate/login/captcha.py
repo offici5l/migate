@@ -8,7 +8,7 @@ import socketserver
 import threading
 from pathlib import Path
 import platform
-from migate.config import console
+from migate.config import HEADERS, BASE_URL, console
 
 class QuietHandler(http.server.SimpleHTTPRequestHandler):
     def log_message(self, format, *args):

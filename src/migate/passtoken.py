@@ -5,6 +5,8 @@ from urllib.parse import urlparse, parse_qs
 import uuid
 from pathlib import Path
 import pickle
+from migate.login.captcha import handle_captcha
+from migate.login.verify import handle_verify
 from migate.config import (
     HEADERS,
     SERVICELOGINAUTH2_URL,

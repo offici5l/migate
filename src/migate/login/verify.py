@@ -1,7 +1,9 @@
 import requests
 import json
 from urllib.parse import urlparse, parse_qs
-from migate.config import console
+from migate.login.sendcode import send_verification_code
+from migate.login.verifycode import verify_code_ticket
+from migate.config import HEADERS, LIST_URL, SERVICELOGINAUTH2_URL, console
 
 def handle_verify(context, auth_data, cookies):
     console.print("\n=== 2FA Verification Required ===\n", style="orange")
