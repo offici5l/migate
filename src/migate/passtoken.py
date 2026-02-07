@@ -5,18 +5,12 @@ from urllib.parse import urlparse, parse_qs
 import uuid
 from pathlib import Path
 import pickle
-from colorama import init, Fore, Style
-
-from migate.login.captcha import handle_captcha
-from migate.login.verify import handle_verify
-
-from miutility.config import (
+from migate.config import (
     HEADERS,
     SERVICELOGINAUTH2_URL,
-    SERVICELOGIN_URL
+    SERVICELOGIN_URL,
+    console
 )
-
-init(autoreset=True)
 
 def get_passtoken(auth_data):
     sid = auth_data['sid']
@@ -25,16 +19,16 @@ def get_passtoken(auth_data):
     if cookies_file.exists():
         passToken = pickle.load(open(cookies_file, "rb"))
         
-        choice = input(
-            f"{Fore.GREEN}Already logged in\n"
-            f"{Fore.WHITE}Account ID: {Fore.YELLOW}{passToken['userId']}\n\n" 
-            f"{Fore.WHITE}Press 'Enter' to continue\n"
-            f"(To log out, type {Fore.RED}2{Fore.WHITE} and press Enter.): "
+        choice = console.input(
+            f"[green]Already logged in[/]\n"
+            f"[white]Account ID: [/][orange]{passToken['userId']}[/]\n\n" 
+            f"[white]Press 'Enter' to continue[/]\n"
+            f"[white](To log out, type [red]2[/] and press Enter.): "
         ).strip().lower()
         
         if choice == "2":
             cookies_file.unlink()
-            print(f"{Fore.RED}Logged out.{Style.RESET_ALL}")
+            console.print("Logged out.", style="red")
         else:
             return passToken
 
@@ -54,8 +48,8 @@ def get_passtoken(auth_data):
     cookies = {}
 
     while True:
-        user = input(f"{Fore.WHITE}Account ID / Email / Phone (+): {Style.RESET_ALL}").strip()
-        pwd_input = input(f"{Fore.WHITE}Password: {Style.RESET_ALL}").strip()
+        user = console.input("[white]Account ID / Email / Phone (+): [/]").strip()
+        pwd_input = console.input("[white]Password: [/]").strip()
         pwd = hashlib.md5(pwd_input.encode()).hexdigest().upper()
         
         auth_data["user"] = user
@@ -67,12 +61,12 @@ def get_passtoken(auth_data):
         response_text = json.loads(response.text[11:])
         
         if response_text.get("code") == 70016:
-            print(f"\n{Fore.RED}Invalid password or username! Please try again.\n")
+            console.print("\nInvalid password or username! Please try again.\n", style="red")
             continue
         break
 
     if response_text.get("code") == 87001:
-        print(f'\n{Fore.YELLOW}CAPTCHA verification required!{Style.RESET_ALL}\n')
+        console.print("\nCAPTCHA verification required!\n", style="orange")
         cookies = response.cookies.get_dict()
         response = handle_captcha(SERVICELOGINAUTH2_URL, response, cookies, auth_data, "captCode")
         
@@ -108,5 +102,5 @@ def get_passtoken(auth_data):
     cookies_file.parent.mkdir(parents=True, exist_ok=True)
     pickle.dump(passToken, open(cookies_file, "wb"))
 
-    print(f"\n{Fore.GREEN}Login successful\n")
+    console.print("\nLogin successful\n", style="green")
     return passToken

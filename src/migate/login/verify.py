@@ -1,16 +1,10 @@
 import requests
 import json
 from urllib.parse import urlparse, parse_qs
-from colorama import init, Fore, Style
-
-from migate.login.sendcode import send_verification_code
-from migate.login.verifycode import verify_code_ticket
-from miutility.config import HEADERS, LIST_URL, SERVICELOGINAUTH2_URL
-
-init(autoreset=True)
+from migate.config import console
 
 def handle_verify(context, auth_data, cookies):
-    print(f'\n{Fore.YELLOW}=== 2FA Verification Required ==={Style.RESET_ALL}\n')
+    console.print("\n=== 2FA Verification Required ===\n", style="orange")
 
     params = {
         'sid': auth_data["sid"],
@@ -24,10 +18,10 @@ def handle_verify(context, auth_data, cookies):
     options = result_json.get('options', [])
 
     if 8 in options and 4 in options:
-        print(f"{Fore.WHITE}Choose verification method:")
-        print(f"{Fore.YELLOW}1{Fore.WHITE} = Phone (SMS)")
-        print(f"{Fore.YELLOW}2{Fore.WHITE} = Email")
-        choice = input(f"{Fore.WHITE}Enter 1 or 2: {Style.RESET_ALL}").strip()
+        console.print("Choose verification method:", style="white")
+        console.print("[orange]1[/][white] = Phone (SMS)[/]")
+        console.print("[orange]2[/][white] = Email[/]")
+        choice = console.input("[white]Enter 1 or 2: [/]").strip()
         
         if choice not in ["1", "2"]:
             return {"error": "Invalid choice!"}

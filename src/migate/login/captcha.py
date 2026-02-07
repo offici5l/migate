@@ -8,11 +8,7 @@ import socketserver
 import threading
 from pathlib import Path
 import platform
-from colorama import init, Fore, Style
-
-from migate.config import HEADERS, BASE_URL
-
-init(autoreset=True)
+from migate.config import console
 
 class QuietHandler(http.server.SimpleHTTPRequestHandler):
     def log_message(self, format, *args):
@@ -43,15 +39,15 @@ def handle_captcha(send_url, response, cookies, payload, capt_key):
         httpd, port = start_temp_server(str(captcha_dir))
         local_url = f"http://127.0.0.1:{port}/{captcha_filename}"
         
-        print(f"{Fore.WHITE}Opening browser to view CAPTCHA...")
+        console.print("Opening browser to view CAPTCHA...", style="white")
         
         if platform.system() == "Linux":
             os.system(f"xdg-open '{local_url}'")
         else:
             webbrowser.open(local_url)
 
-        print(f"{Fore.WHITE}Check browser at: {Fore.YELLOW}{local_url}{Style.RESET_ALL}")
-        user_input = input(f"{Fore.YELLOW}Enter Captcha code from image: {Style.RESET_ALL}")
+        console.print(f"[white]Check browser at: [/][orange]{local_url}[/]")
+        user_input = console.input("[orange]Enter Captcha code from image: [/]")
         
         payload[capt_key] = user_input
 
@@ -66,7 +62,7 @@ def handle_captcha(send_url, response, cookies, payload, capt_key):
         response_text = json.loads(response.text[11:])
 
         if response_text.get("code") == 87001:
-            print(f"\n{Fore.RED}Incorrect captcha code! Trying again...{Style.RESET_ALL}\n")
+            console.print("\nIncorrect captcha code! Trying again...\n", style="red")
             return handle_captcha(send_url, response, cookies, payload, capt_key)
 
         return response

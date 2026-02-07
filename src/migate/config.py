@@ -1,3 +1,6 @@
+from rich.console import Console
+from rich.theme import Theme
+
 agent = "offici5l/migate"
 
 HEADERS = {
@@ -21,3 +24,12 @@ VERIFY_EM = BASE_URL + "/identity/auth/verifyEmail"
 VERIFY_PH = BASE_URL + "/identity/auth/verifyPhone"
 
 USERQUOTA_URL = BASE_URL + "/identity/pass/sms/userQuota"
+
+c_theme = Theme({
+    "orange": "bold #ff6900",
+    "green": "bold #00c853",
+    "red": "bold #d50000",
+    "white": "bold white",
+})
+
+console = Console(theme=c_theme)

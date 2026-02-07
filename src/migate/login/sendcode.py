@@ -1,16 +1,12 @@
 import requests
 import json
-from colorama import init, Fore, Style
-
-from migate.login.captcha import handle_captcha
 from migate.config import (
     HEADERS,
     SEND_EM_TICKET,
     SEND_PH_TICKET,
-    USERQUOTA_URL
+    USERQUOTA_URL,
+    console
 )
-
-init(autoreset=True)
 
 def send_verification_code(addressType, cookies):
 
@@ -26,8 +22,8 @@ def send_verification_code(addressType, cookies):
     response_text = json.loads(response.text[11:])
 
     info = response_text.get('info')
-    info_color = Fore.GREEN if int(info) > 0 else Fore.RED
-    print(f"{Fore.WHITE}Attempts remaining: {info_color}{info}{Style.RESET_ALL}")
+    info_style = "green" if int(info) > 0 else "red"
+    console.print(f"[white]Attempts remaining: [/][{info_style}]{info}[/]")
     
     if info == "0":
         return {"error": f"Sent too many codes to {label}. Try again tomorrow."}
@@ -36,7 +32,7 @@ def send_verification_code(addressType, cookies):
     response_text = json.loads(response.text[11:])
 
     if response_text.get("code") == 87001:
-        print(f'\n{Fore.YELLOW}CAPTCHA verification required for sending code!{Style.RESET_ALL}\n')     
+        console.print("\nCAPTCHA verification required for sending code!\n", style="orange")     
         payload = {'icode': "", '_json': "true"}
         response = handle_captcha(send_url, response, cookies, payload, "icode")
         
@@ -46,7 +42,7 @@ def send_verification_code(addressType, cookies):
         response_text = json.loads(response.text[11:])
 
     if response_text.get("code") == 0:
-        print(f"\n{Fore.GREEN}Code sent to {label} successfully.{Style.RESET_ALL}")
+        console.print(f"\nCode sent to {label} successfully.\n", style="green")
         return {"success": True}
     else:
         code = response_text.get("code")
