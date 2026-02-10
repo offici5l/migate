@@ -97,7 +97,7 @@ def get_passtoken(auth_data):
     required = {"deviceId", "passToken", "userId"}
     missing = required - cookies.keys()
     if missing:
-        return {"error": f"Missing keys: {', '.join(missing)}"}
+        return {"error": f"Missing keys: {', '.join(missing)} | Response: {response_text}"}
 
     passToken = {k: cookies[k] for k in required}
 
