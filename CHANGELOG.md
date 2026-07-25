@@ -80,3 +80,8 @@
 ### Version 1.1.9:
 
 - config updates
+
+### Version 1.1.10:
+
+- config updates
+- Add parse_res utility to parse JSON response
