@@ -1,5 +1,8 @@
-import requests
+import requests, json
 from migate.config import loader
+
+def parse_res(response):
+    return json.loads(response.text[11:])
 
 session = requests.Session()
 session.headers.update({
